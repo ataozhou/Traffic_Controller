@@ -160,7 +160,7 @@ with tf.Session() as sess:
 
 			target_Qs_batch = []
 
-			target_Qs = sess.run(DQNetwork.output, feed_dict={DQNetwork.inputs_: each})
+			target_Qs = sess.run(DQNetwork.output, feed_dict={DQNetwork.inputs_: next_states})
 
 
 			for i in range(0,len(batch)):
@@ -175,7 +175,7 @@ with tf.Session() as sess:
 			targets = np.array([each for each in target_Qs_batch])
 
 			loss, _ = sess.run([DQNetwork.loss, DQNetwork.optimizer],
-				feed_dict= {DQNetwork.inputs_: states.ravel(),
+				feed_dict= {DQNetwork.inputs_: states,
 							DQNetwork.target_Q: targets,
 							DQNetwork.actions_: actions})
 			summary = sess.run(write_op, feed_dict = {DQNetwork.inputs_: states,

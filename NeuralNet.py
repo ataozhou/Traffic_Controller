@@ -15,7 +15,7 @@ class NeuralNet:
 		self.n_nodes_l2 = int(((state_shape + (2 * action_shape)) / 3 + 4))
 
 		with tf.variable_scope(name):
-			self.inputs_ = tf.placeholder(tf.float32, [None, self.state_shape])
+			self.inputs_ = tf.placeholder(tf.float32, [None, *state_shape])
 			self.actions_ = tf.placeholder(tf.float32, [None, self.action_shape])
 			self.target_Q = tf.placeholder(tf.float32, [None])
 
