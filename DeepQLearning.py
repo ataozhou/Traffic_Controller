@@ -13,8 +13,8 @@ from NeuralNet import Memory
 #GLOBAL VARIABLES + training data
 length = 5
 prob = 0.5
-keepalive = -0.5
-wait_weight = 0.5
+keepalive = -2
+wait_weight = 10
 
 state_size = 2*(length + 2)
 action_size = 3
@@ -82,7 +82,7 @@ for i in range(pretrain_length):
 		memory.add((state.ravel(), action, reward, next_state.ravel(), done))
 		state = next_state
 
-writer = tf.summary.FileWriter("/tensorboard/dqn/1")
+#writer = tf.summary.FileWriter("/tensorboard/dqn/1")
 tf.summary.scalar("Loss", DQNetwork.loss)
 
 write_op = tf.summary.merge_all()
@@ -107,7 +107,7 @@ with tf.Session() as sess:
 
 		state = game.getState()
 
-		window = GUI(grid_space)
+		#window = GUI(grid_space)
 
 		while step < max_steps:
 			step +=1
@@ -121,14 +121,14 @@ with tf.Session() as sess:
 				action = random.choice(possible_actions)
 
 			else:
-				Qs = sess.run(DQNetwork.output, feed_dict = {DQNetwork.inputs_: state.ravel()})
+				Qs = sess.run(DQNetwork.output, feed_dict = {DQNetwork.inputs_: state.reshape(1,state_size)})
 
 				action = np.argmax(Qs)
 
 				action = possible_actions[int(action)]
 
 			reward = game.step(NS_action=action[1], EW_action=action[2])
-			window.update(game.getState())
+			#window.update(game.getState())
 
 			done = game.gameEnd()
 
@@ -163,10 +163,6 @@ with tf.Session() as sess:
 			target_Qs = []
 
 			for each in next_states:
-				print(each)
-				print(each.shape)
-				print(each.reshape(1, len(each)))
-				print(each.reshape(1, len(each)).shape)
 				temp = sess.run(DQNetwork.output, feed_dict={DQNetwork.inputs_: each.reshape(1,state_size)})
 				target_Qs.append(temp)
 
@@ -181,20 +177,16 @@ with tf.Session() as sess:
 
 			targets = np.array([each for each in target_Qs_batch])
 
-			print(states.shape)
-			print(actions[1].shape)
-			print(targets.shape)
-
 			for i in range(batch_size):
 				loss, _ = sess.run([DQNetwork.loss, DQNetwork.optimizer],
 					feed_dict= {DQNetwork.inputs_: states[i].reshape(1,state_size),
 								DQNetwork.target_Q: targets[i],
-								DQNetwork.actions_: actions[i].reshape(action_size, 1)})
+								DQNetwork.actions_: actions[i].reshape(1, action_size)})
 				summary = sess.run(write_op, feed_dict = {DQNetwork.inputs_: states[i].reshape(1, state_size),
 														DQNetwork.target_Q: targets[i], 
-														DQNetwork.actions_: actions[i].reshape(action_size, 1)})
-				writer.add_summary(summary,episode)
-				writer.flush()
+														DQNetwork.actions_: actions[i].reshape(1, action_size)})
+				#writer.add_summary(summary,episode)
+				#writer.flush()
 
 				#saving models
 				if episode % 100 == 0:

@@ -50,7 +50,7 @@ class Intersection:
 
 		wait_penalty = self.wait_weight * (self.NSRoad.totalWait() + self.EWRoad.totalWait())
 
-		step_reward -= (self.keepalive + wait_penalty)
-		self.total_reward -= step_reward
+		step_reward += (self.keepalive - wait_penalty)
+		self.total_reward += step_reward
 		return step_reward
 

@@ -54,7 +54,7 @@ class GUI():
             y += self.grid_space
 
 
-
+        #EW Road
         x = center_x - self.grid_space
         y = center_y
         for bit in state[1]:
@@ -63,7 +63,15 @@ class GUI():
             canvas.create_window(x, y, window = label)
             x += self.grid_space
 
+        center = state[0][1] + state[1][1]
+        print(center)
+        label = tk.Label(canvas, text = str(center), fg = 'white', bg = 'black')
+        label.pack()
+        canvas.create_window(center_x, center_y, window = label)
+
         self.c.update()
         time.sleep(2)
 
-
+    def destroy():
+        self.root.quit()
+        self.root.destroy()

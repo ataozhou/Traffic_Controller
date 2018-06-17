@@ -8,16 +8,16 @@ from collections import deque
 class NeuralNet:
 
 	def __init__(self, batch_size, state_shape, action_shape, learning_rate, name = 'DQNetwork'):
-		self.state_shape = int(state_shape)
-		self.action_shape = int(action_shape)
+		self.state_shape = state_shape
+		self.action_shape = action_shape
 		self.learning_rate = learning_rate
 		self.n_nodes_l1 = int((((2* state_shape) + action_shape) / 3 + 4))
 		self.n_nodes_l2 = int(((state_shape + (2 * action_shape)) / 3 + 4))
 
 		with tf.variable_scope(name):
-			self.inputs_ = tf.placeholder(tf.float32, [None, *state_shape])
-			self.actions_ = tf.placeholder(tf.float32, [None, self.action_shape])
-			self.target_Q = tf.placeholder(tf.float32, [None])
+			self.inputs_ = tf.placeholder(tf.float32, [None, int(state_shape)], name="inputs")
+			self.actions_ = tf.placeholder(tf.float32, [None, int(action_shape)], name="actions_")
+			self.target_Q = tf.placeholder(tf.float32, name="target")
 
 			self.layer1 = {'weights':tf.Variable(tf.random_normal([self.state_shape, self.n_nodes_l1])), 'biases':tf.Variable(tf.random_normal([self.n_nodes_l1]))}
 			self.layer2 = {'weights':tf.Variable(tf.random_normal([self.n_nodes_l1, self.n_nodes_l2]) * np.sqrt(2 / self.n_nodes_l1)), 'biases':tf.Variable(tf.random_normal([self.n_nodes_l2]))}
