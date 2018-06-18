@@ -25,6 +25,7 @@ class Road:
 
 		#successful wait command
 		if wait and (self.sections[1][0] == 1):
+			print("waiting")
 			#list + 1
 			self.sections.insert(1, (0,Car()))
 			self.sections[2][1].wait()

@@ -64,7 +64,6 @@ class GUI():
             x += self.grid_space
 
         center = state[0][1] + state[1][1]
-        print(center)
         label = tk.Label(canvas, text = str(center), fg = 'white', bg = 'black')
         label.pack()
         canvas.create_window(center_x, center_y, window = label)

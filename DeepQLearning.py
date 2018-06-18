@@ -14,20 +14,20 @@ from NeuralNet import Memory
 length = 5
 prob = 0.5
 keepalive = -2
-wait_weight = 10
+wait_weight = 0.8
 
 state_size = 2*(length + 2)
 action_size = 3
 learning_rate = 0.0002
 
-total_episodes = 5000
+total_episodes = 2000
 max_steps = 300
 batch_size = 1000
 num_epoch = 20
 
 explore_start = 1.0
 explore_stop = 0.01
-decay_rate = 0.0001
+decay_rate = 0.00015
 
 gamma = 0.99
 
@@ -190,7 +190,7 @@ with tf.Session() as sess:
 
 				#saving models
 				if episode % 100 == 0:
-					save_path = saver.save(sess, "./models/model.ckpt")
+					save_path = saver.save(sess, "./models_2k/model.ckpt")
 					print("Model Saved")
 
 

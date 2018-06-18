@@ -41,12 +41,15 @@ class Intersection:
 		if (NSoutput[1][0] == 1) and (EWoutput[1][0] == 1):
 			self.NSRoad.crash()
 			self.EWRoad.crash()
-			self.total_reward -= -100
+			self.total_reward -= 100
 			self.end = True
 			return -100
 
-		if (NSoutput[0][0] == 1) or (EWoutput[0][0] == 1):
-			step_reward += 10 
+		if (NSoutput[0][0] == 1):
+			step_reward += 15
+
+		if (EWoutput[0][0] == 1):
+			step_reward += 15
 
 		wait_penalty = self.wait_weight * (self.NSRoad.totalWait() + self.EWRoad.totalWait())
 
